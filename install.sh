@@ -2,6 +2,7 @@
 
 sudo -v
 
+
 GITHUB_URL="https://codeload.github.com/KingFalse/ohmyiterm2/zip/master"
 ALIYUN_URL="https://code.aliyun.com/kar/ohmyiterm2/repository/archive.zip?ref=master"
 
