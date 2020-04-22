@@ -2,32 +2,32 @@
 
 sudo -v
 
-
 GITHUB_URL="https://codeload.github.com/KingFalse/ohmyiterm2/zip/master"
 ALIYUN_URL="https://code.aliyun.com/kar/ohmyiterm2/repository/archive.zip?ref=master"
 
 case $1 in
-            "aliyun")
-                URL=$ALIYUN_URL
-                ;;
-            "github")
-                URL=$GITHUB_URL
-                ;;
-            *)
-                echo "您想从阿里云下载还是从GitHub下载"
-                echo "(1:阿里云 2:GitHub)"
-                read -p "默认1:阿里云:"
-                case $num in
-                    2)
-                        echo "您选择从GitHub下载..."
-                        URL=$GITHUB_URL
-                        ;;
-                    *)
-                        echo "您选择了从阿里云下载..."
-                        URL=$ALIYUN_URL
-                esac
+"aliyun")
+  URL=$ALIYUN_URL
+  ;;
+"github")
+  URL=$GITHUB_URL
+  ;;
+*)
+  echo "您想从阿里云下载还是从GitHub下载"
+  echo "(1:阿里云 2:GitHub)"
+  read -p "默认1:阿里云:"
+  case $num in
+  2)
+    echo "您选择从GitHub下载..."
+    URL=$GITHUB_URL
+    ;;
+  *)
+    echo "您选择了从阿里云下载..."
+    URL=$ALIYUN_URL
+    ;;
+  esac
+  ;;
 esac
-
 
 chomp() {
   printf "%s" "${1/"$'\n'"/}"
@@ -64,61 +64,27 @@ execute() {
   fi
 }
 
-
-# 检测CommandLineTools是否已经安装
-if ! [ -e "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
-  echo "正在安装CommandLineTools，下载会比较慢，请稍候..."
-    clt_placeholder="/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress"
-execute_sudo "/usr/bin/touch" "$clt_placeholder"
-
-  clt_label_command="/usr/sbin/softwareupdate -l |
-                      grep -B 1 -E 'Command Line Tools' |
-                      awk -F'*' '/^ *\\*/ {print \$2}' |
-                      sed -e 's/^ *Label: //' -e 's/^ *//' |
-                      sort -V |
-                      tail -n1"
-  clt_label="$(chomp "$(/bin/bash -c "$clt_label_command")")"
-
-if [[ -n "$clt_label" ]]; then
-    echo "Installing $clt_label"
-    execute_sudo "/usr/sbin/softwareupdate" "-i" "$clt_label"
-    execute_sudo "/bin/rm" "-f" "$clt_placeholder"
-    execute_sudo "/usr/bin/xcode-select" "--switch" "/Library/Developer/CommandLineTools"
-fi
-fi
-
-if ! [ -e "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
-    echo "CommandLineTools安装失败，请稍后重新允许此脚本安装，您也可以执行xcode-select --install手动安装CommandLineTools后重新执行本脚本"
-    exit
-fi
+function clearAll() {
+  echo "清理安装缓存文..."
+  sudo rm -rf ~/ohmyiterm2
+}
 
 echo "创建/usr/local/bin"
 sudo mkdir -p /usr/local/bin
+mkdir -p ~/.iterm2/zmodem
 
 echo "正在下载所需文件..."
-curl -o "~/ohmyiterm2.zip" "$URL"
-
-unzip -o ~/ohmyiterm2.zip -d ~/
+curl --location --request GET "$URL" --output "$HOME/ohmyiterm2.zip"
+unzip -o -q ~/ohmyiterm2.zip -d ~/
 rm -rf ~/ohmyiterm2.zip
-cd ~/
-mv ohmyiterm2* ohmyiterm2
-cd ohmyiterm2
+mv ~/ohmyiterm2* ~/ohmyiterm2
+cd ~/ohmyiterm2
+cp ~/ohmyiterm2/iterm2-*-zmodem.sh ~/.iterm2/zmodem
+cp ~/ohmyiterm2/iterm2-*-zmodem.sh ~/.iterm2/zmodem
 
-echo "开始编译安装lrzsz..."
-tar -xvf lrzsz-*.tar.gz
-rm -rf lrzsz-*.tar.gz
-cd lrzsz-*
-./configure --prefix=/usr/local/lrzsz
-sudo make
-sudo make install
-sudo ln -s /usr/local/lrzsz/bin/lrz /usr/local/bin/rz
-sudo ln -s /usr/local/lrzsz/bin/lsz /usr/local/bin/sz
-
-echo "开始编译安装ohmyzsh..."
+echo "开始安装ohmyzsh..."
 unzip -o -q ~/ohmyiterm2/ohmyzsh-master.zip -d ~/.oh-my-zsh
 cat ~/.oh-my-zsh/tools/install.sh | sed -e 's/setup_ohmyzsh$//g' | sed -e 's/-d "$ZSH"/-d "NULL"/g' | bash
-echo "刷新环境变量..."
-source ~/.zshrc
 
 #安装插件
 echo "开始安装ohmyzsh插件git-open..."
@@ -131,14 +97,12 @@ cd ~/.oh-my-zsh/plugins/
 mv git-open* git-open
 mv zsh-autosuggestions* zsh-autosuggestions
 mv zsh-syntax-highlighting* zsh-syntax-highlighting
-echo  "开启ohmyzsh插件..."
+echo "正在开启ohmyzsh插件..."
 sed -i "" 's/^plugins.*$/plugins=(git cp git-open extract zsh-syntax-highlighting zsh-autosuggestions)/g' ~/.zshrc
 
 echo "开始安装starship..."
 sudo tar -zxf ~/ohmyiterm2/starship-x86_64-apple-darwin*.tar.gz -C /usr/local/bin
-echo "eval \"\$(starship init zsh)\"" >> ~/.zshrc
-echo "刷新环境变量..."
-source ~/.zshrc
+echo "eval \"\$(starship init zsh)\"" >>~/.zshrc
 
 echo "正在配置Iterm2..."
 cp ~/ohmyiterm2/com.googlecode.iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist
@@ -149,8 +113,55 @@ sudo unzip -o -q ~/ohmyiterm2/Hack.zip -d /Library/Fonts
 echo "正在安装iTerm2..."
 sudo unzip -o -q ~/ohmyiterm2/iTerm2*.zip -d /Applications
 
-echo "清理安装缓存文..."
-sudo rm -rf ~/ohmyiterm2
+echo "正在安装iTerm2..."
+sudo unzip -o -q ~/ohmyiterm2/iTerm2*.zip -d /Applications
 
-echo "正在启动iTerm2..."
-open /Applications/iTerm.app
+echo "正在安装iTerm2-Utilities扩展..."
+sudo unzip -o -q ~/ohmyiterm2/utilities.zip -d ~/.iterm2
+chmod +x ~/.iterm2/*
+echo "alias imgcat=\${HOME}/.iterm2/imgcat;alias imgls=\${HOME}/.iterm2/imgls;alias it2api=\${HOME}/.iterm2/it2api;alias it2attention=\${HOME}/.iterm2/it2attention;alias it2check=\${HOME}/.iterm2/it2check;alias it2copy=\${HOME}/.iterm2/it2copy;alias it2dl=\${HOME}/.iterm2/it2dl;alias it2getvar=\${HOME}/.iterm2/it2getvar;alias it2git=\${HOME}/.iterm2/it2git;alias it2setcolor=\${HOME}/.iterm2/it2setcolor;alias it2setkeylabel=\${HOME}/.iterm2/it2setkeylabel;alias it2ul=\${HOME}/.iterm2/it2ul;alias it2universion=\${HOME}/.iterm2/it2universion" >~/.iterm2_shell_integration.zsh
+chmod +x ~/.iterm2_shell_integration.zsh
+
+# 检测CommandLineTools是否已经安装
+if ! [ -e "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
+  echo "正在安装CommandLineTools，苹果官网下载会比较慢，请稍候..."
+  clt_placeholder="/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress"
+  execute_sudo "/usr/bin/touch" "$clt_placeholder"
+
+  clt_label_command="/usr/sbin/softwareupdate -l |
+                      grep -B 1 -E 'Command Line Tools' |
+                      awk -F'*' '/^ *\\*/ {print \$2}' |
+                      sed -e 's/^ *Label: //' -e 's/^ *//' |
+                      sort -V |
+                      tail -n1"
+  clt_label="$(chomp "$(/bin/bash -c "$clt_label_command")")"
+
+  if [[ -n "$clt_label" ]]; then
+    echo "Installing $clt_label"
+    execute_sudo "/usr/sbin/softwareupdate" "-i" "$clt_label"
+    execute_sudo "/bin/rm" "-f" "$clt_placeholder"
+    execute_sudo "/usr/bin/xcode-select" "--switch" "/Library/Developer/CommandLineTools"
+  fi
+fi
+
+if ! [ -e "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
+  echo "CommandLineTools安装失败，请稍后重新允许此脚本安装，您也可以执行xcode-select --install手动安装CommandLineTools后重新执行本脚本"
+  clearAll
+  exit
+fi
+
+if ! [ -x "$(command -v sz)" ]; then
+  echo "开始编译安装lrzsz..."
+  tar -xvf ~/ohmyiterm2/lrzsz-*.tar.gz -C ~/ohmyiterm2/
+  rm -rf ~/ohmyiterm2/lrzsz-*.tar.gz
+  cd ~/ohmyiterm2/lrzsz-*
+  ./configure --quiet --prefix=/usr/local/lrzsz
+  sudo make -s
+  sudo make install -s
+  sudo ln -s /usr/local/lrzsz/bin/lrz /usr/local/bin/rz
+  sudo ln -s /usr/local/lrzsz/bin/lsz /usr/local/bin/sz
+fi
+clearAll
+
+echo "刷新环境变量..."
+source ~/.zshrc >/dev/null
