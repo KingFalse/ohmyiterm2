@@ -164,4 +164,4 @@ fi
 clearAll
 
 echo "刷新环境变量..."
-source ~/.zshrc >/dev/null
+source ~/.zshrc >/dev/null 2>&1
