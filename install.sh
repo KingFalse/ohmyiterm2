@@ -93,12 +93,18 @@ echo "开始安装ohmyzsh插件zsh-autosuggestions..."
 tar -zxf ~/ohmyiterm2/zsh-autosuggestions-0.6.4.tar.gz -C ~/.oh-my-zsh/plugins/
 echo "开始安装ohmyzsh插件zsh-syntax-highlighting..."
 tar -zxf ~/ohmyiterm2/zsh-syntax-highlighting-0.7.1.tar.gz -C ~/.oh-my-zsh/plugins/
+echo "开始安装ohmyzsh插件autojump..."
+unzip -o -q ~/ohmyiterm2/autojump-release-v22.5.3.zip -d ~/ohmyiterm2
+cd ~/ohmyiterm2/autojump-release-v22.5.3 && python install.py > /dev/null
+echo "[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh" >> ~/.zshrc
+echo "autoload -U compinit && compinit -u" >> ~/.zshrc
+
 cd ~/.oh-my-zsh/plugins/
 mv git-open* git-open
 mv zsh-autosuggestions* zsh-autosuggestions
 mv zsh-syntax-highlighting* zsh-syntax-highlighting
 echo "正在开启ohmyzsh插件..."
-sed -i "" 's/^plugins.*$/plugins=(git cp git-open extract zsh-syntax-highlighting zsh-autosuggestions)/g' ~/.zshrc
+sed -i "" 's/^plugins.*$/plugins=(git cp git-open autojump extract zsh-syntax-highlighting zsh-autosuggestions)/g' ~/.zshrc
 
 echo "开始安装starship..."
 sudo tar -zxf ~/ohmyiterm2/starship-x86_64-apple-darwin*.tar.gz -C /usr/local/bin
@@ -109,9 +115,6 @@ cp ~/ohmyiterm2/com.googlecode.iterm2.plist ~/Library/Preferences/com.googlecode
 
 echo "正在安装字体..."
 sudo unzip -o -q ~/ohmyiterm2/Hack.zip -d /Library/Fonts
-
-echo "正在安装iTerm2..."
-sudo unzip -o -q ~/ohmyiterm2/iTerm2*.zip -d /Applications
 
 echo "正在安装iTerm2..."
 sudo unzip -o -q ~/ohmyiterm2/iTerm2*.zip -d /Applications
