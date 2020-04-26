@@ -16,6 +16,7 @@
 * 安装[ohmyzsh插件git-open](https://github.com/paulirish/git-open)
 * 安装[ohmyzsh插件zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
 * 安装[ohmyzsh插件zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
+* 安装[ohmyzsh插件autojump](https://github.com/wting/autojump)
 * 安装[ohmyzsh主题starship](https://starship.rs/)
 * 安装[iTerm2](https://iterm2.com/)
 * 安装[iTerm2-Utilities扩展](https://www.iterm2.com/documentation-utilities.html)
