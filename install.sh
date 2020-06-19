@@ -81,6 +81,7 @@ mv ~/ohmyiterm2* ~/ohmyiterm2
 cd ~/ohmyiterm2
 cp ~/ohmyiterm2/iterm2-*-zmodem.sh ~/.iterm2/zmodem
 cp ~/ohmyiterm2/iterm2-*-zmodem.sh ~/.iterm2/zmodem
+chmod 777 ~/.iterm2/zmodem/*
 
 echo "开始安装ohmyzsh..."
 unzip -o -q ~/ohmyiterm2/ohmyzsh-master.zip -d ~/.oh-my-zsh
