@@ -23,3 +23,6 @@
 * 安装[iTerm2-Dracula主题](https://github.com/dracula/iterm)
 * 安装[lrzsz并配置Triggers](https://ohse.de/uwe/software/lrzsz.html)
 
+### 感谢
+* 感谢JetBrains提供IDEA LICENSE支持：[https://www.jetbrains.com/?from=ohmyiterm2](https://www.jetbrains.com/?from=ohmyiterm2)
+
