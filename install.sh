@@ -74,9 +74,9 @@ sudo mkdir -p /usr/local/bin
 mkdir -p ~/.iterm2/zmodem
 
 echo "正在下载所需文件..."
-curl --location --request GET "$URL" --output "$HOME/ohmyiterm2.zip"
-unzip -o -q ~/ohmyiterm2.zip -d ~/
-rm -rf ~/ohmyiterm2.zip
+# curl --location --request GET "$URL" --output "$HOME/ohmyiterm2.zip"
+# unzip -o -q ~/ohmyiterm2.zip -d ~/
+# rm -rf ~/ohmyiterm2.zip
 mv ~/ohmyiterm2* ~/ohmyiterm2
 cd ~/ohmyiterm2
 cp ~/ohmyiterm2/iterm2-*-zmodem.sh ~/.iterm2/zmodem
@@ -166,6 +166,15 @@ if ! [ -x "$(command -v sz)" ]; then
   sudo make install -s
   sudo ln -s /usr/local/lrzsz/bin/lrz /usr/local/bin/rz
   sudo ln -s /usr/local/lrzsz/bin/lsz /usr/local/bin/sz
+fi
+
+if ! [ -x "$(command -v sshpass)" ]; then
+  echo "开始编译安装sshpass..."
+  tar -xvf ~/ohmyiterm2/sshpass-*.tar.gz -C ~/ohmyiterm2/
+  rm -rf ~/ohmyiterm2/sshpass-*.tar.gz
+  cd ~/ohmyiterm2/sshpass-*
+  ./configure --disable-dependency-tracking
+  sudo make install -s
 fi
 clearAll
 
