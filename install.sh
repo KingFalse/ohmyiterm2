@@ -74,9 +74,9 @@ sudo mkdir -p /usr/local/bin
 mkdir -p ~/.iterm2/zmodem
 
 echo "正在下载所需文件..."
-# curl --location --request GET "$URL" --output "$HOME/ohmyiterm2.zip"
-# unzip -o -q ~/ohmyiterm2.zip -d ~/
-# rm -rf ~/ohmyiterm2.zip
+curl --location --request GET "$URL" --output "$HOME/ohmyiterm2.zip"
+unzip -o -q ~/ohmyiterm2.zip -d ~/
+rm -rf ~/ohmyiterm2.zip
 mv ~/ohmyiterm2* ~/ohmyiterm2
 cd ~/ohmyiterm2
 cp ~/ohmyiterm2/iterm2-*-zmodem.sh ~/.iterm2/zmodem
