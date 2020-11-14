@@ -126,9 +126,10 @@ chmod +x ~/.iterm2/*
 
 if ! [ -x "$(command -v sz)" ]; then
   echo "正在安装lrzsz..."
-  sudo mkdir /usr/local/bin
-  tar zxf lrzsz-0.12.20_1.catalina.bottle.tar.gz
-  rm -rf lrzsz-0.12.20_1.catalina.bottle.tar.gz
+  sudo mkdir -p /usr/local/bin
+  tar zxf ~/ohmyiterm2/lrzsz-*.tar.gz -C ~/ohmyiterm2/
+  rm -rf ~/ohmyiterm2/lrzsz-*.tar.gz
+  cd ~/ohmyiterm2/
   mv ./lrzsz/* ./lrzsz/lrzsz
   find ./lrzsz/lrzsz -maxdepth 1 -type f -exec rm -r {} \;
   sudo mv ./lrzsz/lrzsz /usr/local
