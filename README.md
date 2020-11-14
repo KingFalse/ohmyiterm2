@@ -22,6 +22,7 @@
 * 安装[iTerm2-Utilities扩展](https://www.iterm2.com/documentation-utilities.html)
 * 安装[iTerm2-Dracula主题](https://github.com/dracula/iterm)
 * 安装[lrzsz并配置Triggers](https://ohse.de/uwe/software/lrzsz.html)
+* 安装sshpass
 
 ### 感谢
 * 感谢JetBrains提供IDEA LICENSE支持：[https://www.jetbrains.com/?from=ohmyiterm2](https://www.jetbrains.com/?from=ohmyiterm2)
