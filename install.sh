@@ -124,6 +124,19 @@ echo "正在安装iTerm2-Utilities扩展..."
 sudo unzip -o -q ~/ohmyiterm2/utilities.zip -d ~/.iterm2
 chmod +x ~/.iterm2/*
 
+if ! [ -x "$(command -v sz)" ]; then
+  echo "正在安装lrzsz..."
+  sudo mkdir /usr/local/bin
+  tar zxf lrzsz-0.12.20_1.catalina.bottle.tar.gz
+  rm -rf lrzsz-0.12.20_1.catalina.bottle.tar.gz
+  mv ./lrzsz/* ./lrzsz/lrzsz
+  find ./lrzsz/lrzsz -maxdepth 1 -type f -exec rm -r {} \;
+  sudo mv ./lrzsz/lrzsz /usr/local
+  rm -rf ./lrzsz
+  sudo ln -s /usr/local/lrzsz/bin/lrz /usr/local/bin/rz
+  sudo ln -s /usr/local/lrzsz/bin/lsz /usr/local/bin/sz
+fi
+
 echo "test -e ~/.iterm2_shell_integration.zsh && source ~/.iterm2_shell_integration.zsh" >>~/.zshrc
 cp ~/ohmyiterm2/.iterm2_shell_integration.zsh ~/
 chmod +x ~/.iterm2_shell_integration.zsh
@@ -154,18 +167,6 @@ if ! [ -e "/Library/Developer/CommandLineTools/usr/bin/git" ]; then
   echo "CommandLineTools安装失败，请稍后重新允许此脚本安装，您也可以执行xcode-select --install手动安装CommandLineTools后重新执行本脚本"
   clearAll
   exit
-fi
-
-if ! [ -x "$(command -v sz)" ]; then
-  echo "开始编译安装lrzsz..."
-  tar -xvf ~/ohmyiterm2/lrzsz-*.tar.gz -C ~/ohmyiterm2/
-  rm -rf ~/ohmyiterm2/lrzsz-*.tar.gz
-  cd ~/ohmyiterm2/lrzsz-*
-  ./configure --quiet --prefix=/usr/local/lrzsz
-  sudo make -s
-  sudo make install -s
-  sudo ln -s /usr/local/lrzsz/bin/lrz /usr/local/bin/rz
-  sudo ln -s /usr/local/lrzsz/bin/lsz /usr/local/bin/sz
 fi
 
 if ! [ -x "$(command -v sshpass)" ]; then
