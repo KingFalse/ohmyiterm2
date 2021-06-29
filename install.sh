@@ -114,8 +114,12 @@ echo "eval \"\$(starship init zsh)\"" >>~/.zshrc
 echo "正在配置Iterm2..."
 cp ~/ohmyiterm2/com.googlecode.iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist
 
-echo "正在安装字体..."
-sudo unzip -o -q ~/ohmyiterm2/Hack.zip -d /Library/Fonts
+if system_profiler SPFontsDataType | grep "Hack Bold Nerd Font Complete Mono.ttf" >/dev/null; then
+    echo "字体已安装..."
+else
+    echo "正在安装字体..."
+    sudo unzip -o -q ~/ohmyiterm2/Hack.zip -d /Library/Fonts
+fi
 
 echo "正在安装iTerm2..."
 sudo unzip -o -q ~/ohmyiterm2/iTerm2*.zip -d /Applications
